@@ -2,6 +2,7 @@ import { TextField } from '@mui/material';
 import { ChangeEvent, useCallback } from 'react';
 
 export type KeyFieldProps = {
+  label: string;
   value: string;
   onChange: (value: string) => void;
 };
@@ -17,5 +18,5 @@ export function KeyField({ value, onChange }: KeyFieldProps) {
     [onChange],
   );
 
-  return <TextField label="Order key" defaultValue={value} onChange={handleChange} />;
+  return <TextField value={value} onChange={handleChange} />;
 }
