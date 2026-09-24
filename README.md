@@ -1,7 +1,7 @@
 # interview-ui
 
 Internal UI component library used by the interview client. Published to npm
-as `@aleksandrilinykh/interview-ui`.
+as `@aleksandr.ilinykh.weasl/interview-ui`.
 
 ## Scripts
 
@@ -20,7 +20,7 @@ entry.
 - **Prerelease.** Every push to a branch other than `main` publishes
   `<version>-<branch>.<run>` under the npm tag `next`. The exact version is
   printed in the workflow summary. Install it in a client with
-  `npm install @aleksandrilinykh/interview-ui@<that version>`.
+  `npm install @aleksandr.ilinykh.weasl/interview-ui@<that version>`.
 - **Release.** Every push to `main` publishes the version from `package.json`
   under the `latest` tag, tags the commit `v<version>` and creates a GitHub
   release. If that version is already on npm the workflow does nothing, so
