@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AleksandrIlinykh/interview-ui.git"
+    "url": "https://github.com/aleksandrilinykhweasl/interview-ui.git"
   },
   "type": "module",
   "main": "./dist/index.cjs",
