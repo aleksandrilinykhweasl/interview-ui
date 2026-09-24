@@ -1,0 +1,54 @@
+name: prerelease
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+concurrency:
+  group: prerelease-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - run: npm ci
+
+      - name: Set prerelease version
+        id: version
+        run: |
+          BRANCH=$(echo "$GITHUB_REF_NAME" | tr '/_' '--' | tr -cd 'A-Za-z0-9-')
+          BASE=$(node -p "require('./package.json').version")
+          VERSION="${BASE}-${BRANCH}.${GITHUB_RUN_NUMBER}"
+          npm version "$VERSION" --no-git-tag-version
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Publish under the "next" tag
+        run: npm publish --tag next
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Summary
+        run: |
+          NAME=$(node -p "require('./package.json').name")
+          {
+            echo "Published **${NAME}@${VERSION}** under the tag \`next\`."
+            echo
+            echo "Install it in the client:"
+            echo
+            echo '```'
+            echo "npm install ${NAME}@${VERSION}"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
