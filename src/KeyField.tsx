@@ -1,6 +1,5 @@
 import { TextField } from '@mui/material';
-import debounce from 'lodash/debounce';
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useCallback } from 'react';
 
 export type KeyFieldProps = {
   value: string;
@@ -8,23 +7,15 @@ export type KeyFieldProps = {
 };
 
 /**
- * Text field for business keys. Echoes keystrokes immediately and reports
- * the value to the parent with a short delay, so that server-side key checks
- * are not triggered on every character.
+ * Text field for business keys such as order numbers.
  */
 export function KeyField({ value, onChange }: KeyFieldProps) {
-  const [text, setText] = useState(value);
-  const emitChange = useMemo(() => debounce(onChange, 300), [onChange]);
-
-  useEffect(() => () => emitChange.cancel(), [emitChange]);
-
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      setText(event.target.value);
-      emitChange(event.target.value);
+      onChange(event.target.value);
     },
-    [emitChange],
+    [onChange],
   );
 
-  return <TextField label="Order key" value={text} onChange={handleChange} />;
+  return <TextField label="Order key" defaultValue={value} onChange={handleChange} />;
 }
